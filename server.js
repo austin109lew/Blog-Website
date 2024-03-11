@@ -3,6 +3,7 @@ const session = require('express-session');
 const { engine } = require('express-handlebars');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const sequelize = require('./config/database');
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -27,10 +28,23 @@ app.set('view engine', 'handlebars');
 // Serve static files
 app.use(express.static('public'));
 
+// Use authentication routes
+app.use('/auth', authRoutes);
+
+
 // Set up routes (to be implemented)
 app.get('/', (req, res) => {
   res.render('home');
 });
+
+app.get('/signup', (req, res) => {
+  res.render('signup');
+});
+
+app.get('/login', (req, res) => {
+  res.render('login');
+});
+
 
 // Start the server
 sequelize.sync({ force: false }).then(() => {
